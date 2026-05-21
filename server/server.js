@@ -1,23 +1,24 @@
-require("dotenv").config();
-
 const express = require("express");
-const cors = require("cors");
+const router = express.Router();
 
-const app = express();
+const multer = require("multer");
+const path = require("path");
 
-const resumeRoutes = require("./routes/resumeRoutes");
+const { uploadResume } = require("../controllers/resumeController");
 
-app.use(cors());
-app.use(express.json());
+// Multer Storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
 
-app.use("/api/resume", resumeRoutes);
-
-app.get("/", (req, res) => {
-  res.send("Backend Running");
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
 });
 
-const PORT = process.env.PORT || 5000;
+const upload = multer({ storage });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+router.post("/upload", upload.single("resume"), uploadResume);
+
+module.exports = router;
