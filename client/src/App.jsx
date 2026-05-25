@@ -4,40 +4,28 @@ import axios from "axios";
 function App() {
 
   const [file, setFile] = useState(null);
-
   const [message, setMessage] = useState("");
-
   const [resumeText, setResumeText] = useState("");
-
   const [atsScore, setAtsScore] = useState(0);
-
   const [skills, setSkills] = useState([]);
-
   const [missingSkills, setMissingSkills] = useState([]);
-
   const [aiSuggestions, setAiSuggestions] = useState("");
-
   const [loading, setLoading] = useState(false);
 
   // File Select
   const handleFileChange = (e) => {
-
     setFile(e.target.files[0]);
-
   };
 
   // Upload Resume
   const handleUpload = async () => {
 
     if (!file) {
-
       alert("Please select a resume");
       return;
-
     }
 
     const formData = new FormData();
-
     formData.append("resume", file);
 
     try {
@@ -46,7 +34,7 @@ function App() {
 
       const res = await axios.post(
 
-        "https://ai-resume-backend-ler8.onrender.com/api/resume/upload",
+        "https://ai-resume-analyzer-2-1ne2.onrender.com/api/resume/upload",
 
         formData,
 
@@ -59,21 +47,15 @@ function App() {
       );
 
       setMessage(res.data.message);
-
       setResumeText(res.data.text);
-
       setAtsScore(res.data.atsScore);
-
       setSkills(res.data.skills);
-
       setMissingSkills(res.data.missingSkills);
-
       setAiSuggestions(res.data.aiSuggestions);
 
     } catch (error) {
 
       console.log(error);
-
       setMessage("Upload failed");
 
     } finally {
