@@ -5,20 +5,13 @@ const uploadResume = async (req, res) => {
 
   try {
 
-    // Check file
-    if (!req.file) {
-      return res.status(400).json({
-        message: "No file uploaded",
-      });
-    }
-
     // File path
     const filePath = req.file.path;
 
-    // Read PDF
+    // Read PDF file
     const dataBuffer = fs.readFileSync(filePath);
 
-    // Extract text
+    // Extract text from PDF
     const pdfData = await pdfParse(dataBuffer);
 
     const resumeText = pdfData.text;
@@ -60,7 +53,7 @@ const uploadResume = async (req, res) => {
     // ATS Score
     const atsScore = foundSkills.length * 10;
 
-    // AI Suggestions
+    // AI Suggestions (Static)
     let aiSuggestions = `
 1. Add more technical projects.
 
@@ -73,8 +66,8 @@ const uploadResume = async (req, res) => {
 5. Use better action words in experience.
 `;
 
-    // Response
-    res.status(200).json({
+    // Send Response
+    res.json({
 
       message:
         "Resume uploaded and analyzed successfully",
@@ -97,9 +90,7 @@ const uploadResume = async (req, res) => {
 
     res.status(500).json({
       message: "Error parsing resume",
-      error: error.message,
     });
-
   }
 };
 
